@@ -73,9 +73,9 @@
                 <artifactId>azure-functions-maven-plugin</artifactId>
                 <version>1.14.0</version>
                 <configuration>
-                    <appName>visitas-demo</appName>
+                    <appName>visitas-application</appName>
                     <resourceGroup>Proyecto-Codorniz</resourceGroup>
-                    <region>South Central US</region>
+                    <region>East US </region>
                     <pricingPlan>Consumption</pricingPlan>
                     <deploymentType>run_from_blob</deploymentType>
                 </configuration>
