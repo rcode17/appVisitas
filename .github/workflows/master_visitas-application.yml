@@ -25,6 +25,9 @@ jobs:
     
       - name: 'Checkout del código'
         uses: actions/checkout@v4
+
+      - name: 'Ver estructura del proyecto'
+        run: ls -R
       
       - name: 'Mostrar directorio actual'
         run: pwd
