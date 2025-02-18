@@ -96,13 +96,14 @@ public class VisitaFunctions {
             final ExecutionContext context) {
 
         context.getLogger().info("Buscando visita con ID: " + idVisitaStr);
-
+        ErrorResponse mensaje = new ErrorResponse(200, "Hola Mundo");
+        
         try {
-            Integer idVisita = Integer.parseInt(idVisitaStr);
-            Visita visita = visitaService.obtenerPorId(idVisita);
+            /*Integer idVisita = Integer.parseInt(idVisitaStr);
+            Visita visita = visitaService.obtenerPorId(idVisita);*/
             return request.createResponseBuilder(HttpStatus.OK)
                     .header("Content-Type", "application/json")
-                    .body(visita)
+                    .body(mensaje)
                     .build();
         } catch (Exception e) {
             return ExceptionHandlerUtil.handleException(request, e, context);
