@@ -40,7 +40,7 @@ jobs:
 
       - name: 'Construir el JAR con Maven'
         run: |
-          mvn clean package -DskipTests -Pproduction | tee build.log
+          mvn clean package -DskipTests | tee build.log
 
       - name: 'Verificar que el JAR se generó correctamente'
         run: |
