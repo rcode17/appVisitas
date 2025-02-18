@@ -38,10 +38,6 @@ jobs:
           distribution: 'temurin'
           java-version: ${{ env.JAVA_VERSION }}
 
-      - name: 'Verificar archivos en target'
-        run: |
-          ls -l target/
-
       - name: 'Construir el JAR con Maven'
         run: |
           mvn clean package -DskipTests -Pproduction | tee build.log
