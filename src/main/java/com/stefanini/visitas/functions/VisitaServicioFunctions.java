@@ -36,11 +36,15 @@ public class VisitaServicioFunctions {
         context.getLogger().info("Obteniendo servicios para la visita con ID: " + idVisitaStr);
 
         try {
-        	Integer idVisita = Integer.parseInt(idVisitaStr);
+            Integer idVisita = Integer.parseInt(idVisitaStr);
             List<VisitaServicio> servicios = visitaServicioService.obtenerServiciosPorVisita(idVisita);
             return request.createResponseBuilder(HttpStatus.OK).body(servicios).build();
+        } catch (NumberFormatException e) {
+            return request.createResponseBuilder(HttpStatus.BAD_REQUEST)
+                .body("El ID de la visita debe ser un número válido.")
+                .build();
         } catch (Exception e) {
-            return ExceptionHandlerUtil.handleException(request, e);
+            return ExceptionHandlerUtil.handleException(request, e, context);
         }
     }
 
@@ -57,11 +61,24 @@ public class VisitaServicioFunctions {
         context.getLogger().info("Agregando persona a la visita con ID: " + idVisitaStr);
 
         try {
-        	Integer idVisita = Integer.parseInt(idVisitaStr);
-            VisitaServicio nuevaPersona = visitaServicioService.agregarPersona(idVisita, request.getBody());
-            return request.createResponseBuilder(HttpStatus.OK).body(nuevaPersona).build();
+            Integer idVisita = Integer.parseInt(idVisitaStr);
+            VisitaServicioDTO visitaDTO = request.getBody();
+
+            if (visitaDTO == null) {
+                return request.createResponseBuilder(HttpStatus.BAD_REQUEST)
+                    .body("El cuerpo de la solicitud no puede estar vacío.")
+                    .build();
+            }
+
+            VisitaServicio nuevaPersona = visitaServicioService.agregarPersona(idVisita, visitaDTO);
+            return request.createResponseBuilder(HttpStatus.CREATED).body(nuevaPersona).build();
+
+        } catch (NumberFormatException e) {
+            return request.createResponseBuilder(HttpStatus.BAD_REQUEST)
+                .body("El ID de la visita debe ser un número válido.")
+                .build();
         } catch (Exception e) {
-            return ExceptionHandlerUtil.handleException(request, e);
+            return ExceptionHandlerUtil.handleException(request, e, context);
         }
     }
 
@@ -79,12 +96,25 @@ public class VisitaServicioFunctions {
         context.getLogger().info("Actualizando persona en la visita con ID: " + idVisitaStr);
 
         try {
-        	Integer idVisitaServicio = Integer.parseInt(idVisitaServicioStr);
-        	Integer idVisita = Integer.parseInt(idVisitaStr);
-            VisitaServicio personaActualizada = visitaServicioService.editarPersona(idVisitaServicio, idVisita, request.getBody());
+            Integer idVisita = Integer.parseInt(idVisitaStr);
+            Integer idVisitaServicio = Integer.parseInt(idVisitaServicioStr);
+            VisitaServicioDTO visitaDTO = request.getBody();
+
+            if (visitaDTO == null) {
+                return request.createResponseBuilder(HttpStatus.BAD_REQUEST)
+                    .body("El cuerpo de la solicitud no puede estar vacío.")
+                    .build();
+            }
+
+            VisitaServicio personaActualizada = visitaServicioService.editarPersona(idVisitaServicio, idVisita, visitaDTO);
             return request.createResponseBuilder(HttpStatus.OK).body(personaActualizada).build();
+
+        } catch (NumberFormatException e) {
+            return request.createResponseBuilder(HttpStatus.BAD_REQUEST)
+                .body("Los IDs deben ser números válidos.")
+                .build();
         } catch (Exception e) {
-            return ExceptionHandlerUtil.handleException(request, e);
+            return ExceptionHandlerUtil.handleException(request, e, context);
         }
     }
 
@@ -102,12 +132,17 @@ public class VisitaServicioFunctions {
         context.getLogger().info("Eliminando persona con ID " + idVisitaServicioStr + " de la visita con ID: " + idVisitaStr);
 
         try {
-        	Integer idVisitaServicio = Integer.parseInt(idVisitaServicioStr);
-        	Integer idVisita = Integer.parseInt(idVisitaStr);
+            Integer idVisita = Integer.parseInt(idVisitaStr);
+            Integer idVisitaServicio = Integer.parseInt(idVisitaServicioStr);
             visitaServicioService.eliminarPersona(idVisita, idVisitaServicio);
             return request.createResponseBuilder(HttpStatus.NO_CONTENT).build();
+
+        } catch (NumberFormatException e) {
+            return request.createResponseBuilder(HttpStatus.BAD_REQUEST)
+                .body("Los IDs deben ser números válidos.")
+                .build();
         } catch (Exception e) {
-            return ExceptionHandlerUtil.handleException(request, e);
+            return ExceptionHandlerUtil.handleException(request, e, context);
         }
     }
 }

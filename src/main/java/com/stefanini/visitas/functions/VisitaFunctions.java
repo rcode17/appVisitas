@@ -25,9 +25,6 @@ public class VisitaFunctions {
         this.visitaService = visitaService;
     }
 
-    /**
-     * Obtener todas las visitas
-     */
     @FunctionName("obtenerVisitas")
     public HttpResponseMessage obtenerTodasLasVisitas(
             @HttpTrigger(name = "req", methods = {HttpMethod.GET}, authLevel = AuthorizationLevel.ANONYMOUS)
@@ -38,58 +35,59 @@ public class VisitaFunctions {
 
         try {
             List<Visita> visitas = visitaService.obtenerTodasLasVisitas();
-            return request.createResponseBuilder(HttpStatus.OK).body(visitas).build();
+            return request.createResponseBuilder(HttpStatus.OK)
+                    .header("Content-Type", "application/json")
+                    .body(visitas)
+                    .build();
 
         } catch (Exception e) {
-            return ExceptionHandlerUtil.handleException(request, e);
+            return ExceptionHandlerUtil.handleException(request, e, context);
         }
     }
-    
-    //version 2 por query params
+
     @FunctionName("obtenerVisitasV2")
     public HttpResponseMessage obtenerVisitas(
             @HttpTrigger(name = "req", methods = {HttpMethod.GET}, authLevel = AuthorizationLevel.ANONYMOUS, route = "v2")
             HttpRequestMessage<Optional<String>> request,
-            @BindingName("idVisita") String idVisitaStr,
-            @BindingName("user") String user,
             final ExecutionContext context) {
+
+        String idVisitaStr = request.getQueryParameters().get("idVisita");
+        String user = request.getQueryParameters().get("user");
 
         context.getLogger().info("Obteniendo visitas con idVisita=" + idVisitaStr + " y user=" + user);
 
         try {
-            Integer idVisita = (idVisitaStr != null) ? Integer.parseInt(idVisitaStr) : null;
-
-            if (idVisita != null) {
+            if (idVisitaStr != null) {
+                Integer idVisita = Integer.parseInt(idVisitaStr);
                 return request.createResponseBuilder(HttpStatus.OK)
+                        .header("Content-Type", "application/json")
                         .body(Collections.singletonList(visitaService.obtenerPorId(idVisita)))
                         .build();
             }
 
             if (user != null && !user.isEmpty()) {
                 return request.createResponseBuilder(HttpStatus.OK)
+                        .header("Content-Type", "application/json")
                         .body(visitaService.findByUser(user))
                         .build();
             }
 
             return request.createResponseBuilder(HttpStatus.OK)
+                    .header("Content-Type", "application/json")
                     .body(visitaService.obtenerTodasLasVisitas())
                     .build();
 
         } catch (NumberFormatException e) {
             return request.createResponseBuilder(HttpStatus.BAD_REQUEST)
+                    .header("Content-Type", "application/json")
                     .body(new ErrorResponse(400, "El idVisita debe ser un número válido."))
                     .build();
 
         } catch (Exception e) {
-            return ExceptionHandlerUtil.handleException(request, e);
+            return ExceptionHandlerUtil.handleException(request, e, context);
         }
     }
 
-
-
-    /**
-     * Obtener una visita por ID
-     */
     @FunctionName("obtenerVisitaPorId")
     public HttpResponseMessage obtenerVisitaPorId(
             @HttpTrigger(name = "req", methods = {HttpMethod.GET}, authLevel = AuthorizationLevel.ANONYMOUS, route = "visitas/{id}")
@@ -100,18 +98,17 @@ public class VisitaFunctions {
         context.getLogger().info("Buscando visita con ID: " + idVisitaStr);
 
         try {
-        	Integer idVisita = Integer.parseInt(idVisitaStr);
+            Integer idVisita = Integer.parseInt(idVisitaStr);
             Visita visita = visitaService.obtenerPorId(idVisita);
-            return request.createResponseBuilder(HttpStatus.OK).body(visita).build();
+            return request.createResponseBuilder(HttpStatus.OK)
+                    .header("Content-Type", "application/json")
+                    .body(visita)
+                    .build();
         } catch (Exception e) {
-            return ExceptionHandlerUtil.handleException(request, e);
+            return ExceptionHandlerUtil.handleException(request, e, context);
         }
     }
 
-
-    /**
-     * Eliminar una visita por ID
-     */
     @FunctionName("eliminarVisita")
     public HttpResponseMessage eliminarVisita(
             @HttpTrigger(name = "req", methods = {HttpMethod.DELETE}, authLevel = AuthorizationLevel.ANONYMOUS, route = "visitas/{id}")
@@ -122,69 +119,65 @@ public class VisitaFunctions {
         context.getLogger().info("Eliminando visita con ID: " + idVisitaStr);
 
         try {
-        	Integer idVisita = Integer.parseInt(idVisitaStr);
+            Integer idVisita = Integer.parseInt(idVisitaStr);
             visitaService.eliminarVisita(idVisita);
             return request.createResponseBuilder(HttpStatus.NO_CONTENT).build();
 
         } catch (Exception e) {
-            return ExceptionHandlerUtil.handleException(request, e);
+            return ExceptionHandlerUtil.handleException(request, e, context);
         }
     }
 
-    /**
-     * Guardar una nueva visita
-     */
     @FunctionName("guardarVisita")
     public HttpResponseMessage guardarVisita(
             @HttpTrigger(name = "req", methods = {HttpMethod.POST}, authLevel = AuthorizationLevel.ANONYMOUS)
-            HttpRequestMessage<VisitaDTO> request,
+            HttpRequestMessage<Optional<VisitaDTO>> request,
             final ExecutionContext context) {
 
         context.getLogger().info("Guardando una nueva visita");
 
         try {
-        	VisitaDTO visita = request.getBody();
+            VisitaDTO visita = request.getBody().orElseThrow(() -> new IllegalArgumentException("El cuerpo de la solicitud está vacío."));
             Visita nuevaVisita = visitaService.guardarVisita(visita);
-            return request.createResponseBuilder(HttpStatus.CREATED).body(nuevaVisita).build();
+            return request.createResponseBuilder(HttpStatus.CREATED)
+                    .header("Content-Type", "application/json")
+                    .body(nuevaVisita)
+                    .build();
 
         } catch (Exception e) {
-            return ExceptionHandlerUtil.handleException(request, e);
+            return ExceptionHandlerUtil.handleException(request, e, context);
         }
     }
-    
-    
-    /**
-     * Editar una visita por ID
-     */
+
     @FunctionName("editarVisita")
     public HttpResponseMessage editarVisita(
             @HttpTrigger(name = "req", methods = {HttpMethod.PUT}, authLevel = AuthorizationLevel.ANONYMOUS, route = "visitas/{id}")
-            HttpRequestMessage<VisitaDTO> request,
+            HttpRequestMessage<Optional<VisitaDTO>> request,
             @BindingName("id") String idVisitaStr,
             final ExecutionContext context) {
 
         context.getLogger().info("Editando visita con ID: " + idVisitaStr);
 
         try {
-        	Integer idVisita = Integer.parseInt(idVisitaStr);
-        	VisitaDTO visita = request.getBody();
+            Integer idVisita = Integer.parseInt(idVisitaStr);
+            VisitaDTO visita = request.getBody().orElseThrow(() -> new IllegalArgumentException("El cuerpo de la solicitud está vacío."));
             Visita visitaEditada = visitaService.editarVisita(idVisita, visita);
-            return request.createResponseBuilder(HttpStatus.OK).body(visitaEditada).build();
+            return request.createResponseBuilder(HttpStatus.OK)
+                    .header("Content-Type", "application/json")
+                    .body(visitaEditada)
+                    .build();
 
         } catch (Exception e) {
-            return ExceptionHandlerUtil.handleException(request, e);
+            return ExceptionHandlerUtil.handleException(request, e, context);
         }
     }
-    
-    /**
-     * Obtener visitas por Usuario
-     */
+
     @FunctionName("obtenerVisitasPorUsuario")
     public HttpResponseMessage obtenerVisitasPorUsuario(
-        @HttpTrigger(name = "req", methods = {HttpMethod.GET}, route = "visitas/usuario/{user}", authLevel = AuthorizationLevel.ANONYMOUS)
-        HttpRequestMessage<Optional<String>> request,
-        @BindingName("user") String user,
-        final ExecutionContext context) {
+            @HttpTrigger(name = "req", methods = {HttpMethod.GET}, route = "visitas/usuario/{user}", authLevel = AuthorizationLevel.ANONYMOUS)
+            HttpRequestMessage<Optional<String>> request,
+            @BindingName("user") String user,
+            final ExecutionContext context) {
 
         context.getLogger().info("Procesando solicitud para obtener visitas del usuario: " + user);
 
@@ -192,14 +185,17 @@ public class VisitaFunctions {
             List<Visita> visitas = visitaService.findByUser(user);
             if (visitas.isEmpty()) {
                 return request.createResponseBuilder(HttpStatus.NOT_FOUND)
+                        .header("Content-Type", "application/json")
                         .body(new ErrorResponse(404, "No se encontraron visitas para el usuario: " + user))
                         .build();
             }
-            return request.createResponseBuilder(HttpStatus.OK).body(visitas).build();
+            return request.createResponseBuilder(HttpStatus.OK)
+                    .header("Content-Type", "application/json")
+                    .body(visitas)
+                    .build();
 
         } catch (Exception e) {
-            return ExceptionHandlerUtil.handleException(request, e);
+            return ExceptionHandlerUtil.handleException(request, e, context);
         }
     }
-
 }

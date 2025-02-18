@@ -36,13 +36,17 @@ public class MasaFunctions {
             List<Masa> masas = masaService.obtenerPorUsuario(user);
             if (masas.isEmpty()) {
                 return request.createResponseBuilder(HttpStatus.NOT_FOUND)
+                        .header("Content-Type", "application/json")
                         .body(new ErrorResponse(404, "No se encontraron masas para el usuario: " + user))
                         .build();
             }
-            return request.createResponseBuilder(HttpStatus.OK).body(masas).build();
+            return request.createResponseBuilder(HttpStatus.OK)
+                    .header("Content-Type", "application/json")
+                    .body(masas)
+                    .build();
 
         } catch (Exception e) {
-            return ExceptionHandlerUtil.handleException(request, e);
+            return ExceptionHandlerUtil.handleException(request, e, context);
         }
     }
 }
