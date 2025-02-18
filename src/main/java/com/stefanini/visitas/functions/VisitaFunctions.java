@@ -46,9 +46,9 @@ public class VisitaFunctions {
     }
     
     //version 2 por query params
-    @FunctionName("obtenerVisitas")
+    @FunctionName("obtenerVisitasV2")
     public HttpResponseMessage obtenerVisitas(
-            @HttpTrigger(name = "req", methods = {HttpMethod.GET}, authLevel = AuthorizationLevel.ANONYMOUS, route = "visitas")
+            @HttpTrigger(name = "req", methods = {HttpMethod.GET}, authLevel = AuthorizationLevel.ANONYMOUS, route = "v2")
             HttpRequestMessage<Optional<String>> request,
             @BindingName("idVisita") String idVisitaStr,
             @BindingName("user") String user,
