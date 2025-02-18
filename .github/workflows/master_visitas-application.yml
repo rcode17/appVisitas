@@ -1,5 +1,5 @@
-# Docs para el deploy en Azure Functions: https://github.com/azure/functions-action
-# Más GitHub Actions para Azure: https://github.com/Azure/actions
+# Docs for the Azure Web Apps Deploy action: https://github.com/azure/functions-action
+# More GitHub Actions for Azure: https://github.com/Azure/actions
 
 name: Build and deploy Java project to Azure Function App - visitas-application
 
@@ -10,60 +10,44 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_FUNCTIONAPP_NAME: visitas-application # Nombre de la Function App en Azure
-  PACKAGE_DIRECTORY: './appVisitas' # Directorio que contiene el pom.xml
-  JAVA_VERSION: '11' # Versión de Java usada en la función
+  AZURE_FUNCTIONAPP_NAME: visitas-application # set this to your function app name on Azure
+  PACKAGE_DIRECTORY: '.' # set this to the directory which contains pom.xml file
+  JAVA_VERSION: '11' # set this to the Java version to use
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
-      id-token: write # Necesario para autenticación OIDC en Azure
-      contents: read # Requerido para actions/checkout
+      id-token: write # This is required for requesting the JWT
+      contents: read # This is required for actions/checkout
 
     steps:
-    
-      - name: 'Checkout del código'
+      - name: 'Checkout GitHub Action'
         uses: actions/checkout@v4
 
-      - name: 'Ver estructura del proyecto'
-        run: ls -R
-      
-      - name: 'Mostrar directorio actual'
-        run: pwd
-
-      - name: 'Configurar Java SDK'
+      - name: Setup Java SDK
         uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'
-          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'  # Otras opciones: adopt, corretto, etc.
+          java-version: '11'  # Asegúrate de que esta línea esté correctamente indentada
 
-      - name: Build with Maven
+      - name: 'Restore Project Dependencies Using Maven'
         run: |
-          mvn clean package -DskipTests
-          ls -l target/
-
-
-      - name: 'Verificar que el JAR se generó correctamente'
-        run: |
-          ls -l target/*.jar || (echo "No se encontró el archivo JAR" && exit 1)
-
-      - name: 'Login en Azure'
+          cd ${{ env.PACKAGE_DIRECTORY }}
+          mvn clean package
+      
+      - name: Login to Azure
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_04ADA7C7D2464CB98CE188E3A0B088F7 }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_4AD5A9A3CD034A15BEA224D93F9492F6 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_EA656072DC5742BFB523935152ACF33D }}
 
-      - name: 'Desplegar en Azure Functions'
+      - name: 'Run Azure Functions Action'
         uses: Azure/functions-action@v1
         id: fa
         with:
-          app-name: visitas-application
+          app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}  # Usar la variable de entorno definida
           slot-name: 'Production'
-          package: 'target/*.jar'
+          package: '${{ env.PACKAGE_DIRECTORY }}'
           respect-pom-xml: true
-
-      - name: 'Reiniciar la Function App después del despliegue'
-        run: |
-          az functionapp restart --name ${{ env.AZURE_FUNCTIONAPP_NAME }} --resource-group Proyecto-Codorniz
