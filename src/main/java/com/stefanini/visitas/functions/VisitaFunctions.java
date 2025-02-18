@@ -18,7 +18,7 @@ import com.stefanini.visitas.service.VisitaService;
 @Component
 public class VisitaFunctions {
 
-	@FunctionName("obtenerVisitas")
+	@FunctionName("obtenerVisitasTemporal")
 	public HttpResponseMessage obtenerTodasLasVisitas(@HttpTrigger(name = "req", methods = {
 			HttpMethod.GET }, authLevel = AuthorizationLevel.ANONYMOUS) HttpRequestMessage<Optional<String>> request,
 			final ExecutionContext context) {
