@@ -38,9 +38,11 @@ jobs:
           distribution: 'temurin'
           java-version: ${{ env.JAVA_VERSION }}
 
-      - name: 'Construir el JAR con Maven'
+      - name: Build with Maven
         run: |
-          mvn clean package -DskipTests | tee build.log
+          cd ./appVisitas
+          mvn clean package -DskipTests
+          ls -l target/
 
       - name: 'Verificar que el JAR se generó correctamente'
         run: |
@@ -59,7 +61,7 @@ jobs:
         with:
           app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
           slot-name: 'Production'
-          package: 'target/*.jar'
+          package: './appVisitas/target/*.jar'
           respect-pom-xml: true
 
       - name: 'Reiniciar la Function App después del despliegue'
