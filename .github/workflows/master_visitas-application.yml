@@ -11,7 +11,7 @@ on:
 
 env:
   AZURE_FUNCTIONAPP_NAME: visitas-application # Nombre de la Function App en Azure
-  PACKAGE_DIRECTORY: '.' # Directorio que contiene el pom.xml
+  PACKAGE_DIRECTORY: './appVisitas' # Directorio que contiene el pom.xml
   JAVA_VERSION: '11' # Versión de Java usada en la función
 
 jobs:
