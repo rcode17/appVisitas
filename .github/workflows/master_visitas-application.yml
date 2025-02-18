@@ -22,8 +22,12 @@ jobs:
       contents: read # Requerido para actions/checkout
 
     steps:
+    
       - name: 'Checkout del código'
         uses: actions/checkout@v4
+      
+      - name: 'Mostrar directorio actual'
+        run: pwd
 
       - name: 'Configurar Java SDK'
         uses: actions/setup-java@v3
@@ -37,7 +41,7 @@ jobs:
 
       - name: 'Construir el JAR con Maven'
         run: |
-          mvn clean package -DskipTests -Pproduction
+          mvn clean package -DskipTests -Pproduction | tee build.log
 
       - name: 'Verificar que el JAR se generó correctamente'
         run: |
@@ -56,7 +60,7 @@ jobs:
         with:
           app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
           slot-name: 'Production'
-          package: 'target/visitas-0.0.1-SNAPSHOT.jar'
+          package: 'target/*.jar'
           respect-pom-xml: true
 
       - name: 'Reiniciar la Function App después del despliegue'
