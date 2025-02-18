@@ -15,8 +15,8 @@
 	<description>Demo App Visitas</description>
 	<properties>
 		<java.version>11</java.version>
-		<azure.functions.maven.plugin.version>1.4.0</azure.functions.maven.plugin.version>
-        <spring.version>2.5.0</spring.version>
+		<functionAppName>visitas-application</functionAppName>
+        <azure.functions.maven.plugin.version>1.4.0</azure.functions.maven.plugin.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -82,6 +82,14 @@
                     <pricingPlan>Consumption</pricingPlan>
                     <deploymentType>run_from_blob</deploymentType>
                 </configuration>
+                
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>package</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 		</plugins>
 	</build>
