@@ -24,4 +24,11 @@ public class MasaServiceImpl implements MasaService {
 		return masa;
 	}
 
+	@Override
+	public List<Masa> obtenerTodosUsuario() {
+		
+		return masaRepository.findAll();
+	}
+
+
 }

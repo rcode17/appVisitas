@@ -38,10 +38,10 @@ public class Visita {
     private String user;
 
     @Column(name = "COD_CLIENTE")
-    private Integer codCliente;
+    private String codCliente;
 
     @Column(name = "COD_PROYECTO")
-    private Integer codProyecto;
+    private String codProyecto;
 
     @ManyToOne
     @JoinColumn(name = "IdTipoVisita", nullable = false)

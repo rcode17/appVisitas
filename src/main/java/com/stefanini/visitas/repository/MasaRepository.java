@@ -11,4 +11,5 @@ import com.stefanini.visitas.modelo.Masa;
 public interface MasaRepository extends JpaRepository<Masa, Long> {
     
     List<Masa> findByUser(String user);
+    List<Masa> findAll();
 }

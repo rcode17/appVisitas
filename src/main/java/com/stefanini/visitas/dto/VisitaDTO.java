@@ -10,8 +10,8 @@ import lombok.Setter;
 @Setter
 public class VisitaDTO {
     private String user;
-    private Integer codCliente;
-    private Integer codProyecto;
+    private String codCliente;
+    private String codProyecto;
     private Short idTipoVisita;
     private Date diaVisita;
     private Short idRango;

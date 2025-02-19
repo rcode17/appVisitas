@@ -21,5 +21,11 @@ public class MasaController {
     public List<Masa> obtenerPorUsuario(@PathVariable String user) {
         return masaService.obtenerPorUsuario(user);
     }
+	
+	@GetMapping()
+    public List<Masa> obtenerTodosUsuario() {
+        return masaService.obtenerTodosUsuario();
+    }
+
 
 }

@@ -1,7 +1,6 @@
 package com.stefanini.visitas.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.stefanini.visitas.dto.VisitaDTO;
 import com.stefanini.visitas.modelo.Visita;
