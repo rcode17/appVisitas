@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.stefanini.visitas.dto.ErrorResponse;
 import com.stefanini.visitas.dto.VisitaServicioDTO;
 import com.stefanini.visitas.modelo.VisitaServicio;
 import com.stefanini.visitas.service.VisitaServicioService;
@@ -54,7 +55,8 @@ public class VisitaServicioController {
     }
     
     @DeleteMapping("/{idVisita}/persona/{idVisitaServicio}")
-    public void eliminarPersona(@PathVariable Integer idVisita, @PathVariable Integer idVisitaServicio) {
+    public ResponseEntity<?> eliminarPersona(@PathVariable Integer idVisita, @PathVariable Integer idVisitaServicio) {
         visitaServicioService.eliminarPersona(idVisita, idVisitaServicio);
+        return ResponseEntity.ok(new ErrorResponse(200,"Persona eliminada correctamente."));
     }
 }
