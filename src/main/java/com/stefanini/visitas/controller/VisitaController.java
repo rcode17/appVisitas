@@ -20,7 +20,7 @@ import com.stefanini.visitas.modelo.Visita;
 import com.stefanini.visitas.service.VisitaService;
 
 @RestController
-@CrossOrigin(origins = "https://demovisitas.azurewebsites.net")
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/visitas")
 public class VisitaController {
 	

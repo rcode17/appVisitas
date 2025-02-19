@@ -13,7 +13,7 @@ import com.stefanini.visitas.modelo.Masa;
 import com.stefanini.visitas.service.MasaService;
 
 @RestController
-@CrossOrigin(origins = "https://demovisitas.azurewebsites.net")
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/masa")
 public class MasaController {
 	
