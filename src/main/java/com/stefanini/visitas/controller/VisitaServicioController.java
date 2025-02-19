@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,7 @@ import com.stefanini.visitas.modelo.VisitaServicio;
 import com.stefanini.visitas.service.VisitaServicioService;
 
 @RestController
+@CrossOrigin(origins = "https://demovisitas.azurewebsites.net")
 @RequestMapping("/api/visita-servicio")
 public class VisitaServicioController {
 	
