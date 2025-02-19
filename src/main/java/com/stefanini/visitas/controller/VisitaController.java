@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.stefanini.visitas.dto.ErrorResponse;
 import com.stefanini.visitas.dto.VisitaDTO;
 import com.stefanini.visitas.modelo.Visita;
 import com.stefanini.visitas.service.VisitaService;
@@ -74,7 +75,7 @@ public class VisitaController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminarVisita(@PathVariable Integer id) {
         visitaService.eliminarVisita(id);
-        return ResponseEntity.ok("Visita eliminada correctamente.");
+        return ResponseEntity.ok(new ErrorResponse(200,"Visita eliminada correctamente."));
     }
 
 
