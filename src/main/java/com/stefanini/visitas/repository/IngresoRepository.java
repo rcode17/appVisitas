@@ -7,4 +7,5 @@ import com.stefanini.visitas.modelo.Ingreso;
 
 @Repository
 public interface IngresoRepository extends JpaRepository<Ingreso, Integer> {
+	public Ingreso findByUserAndPwd(String usuario, String contrasena);
 }

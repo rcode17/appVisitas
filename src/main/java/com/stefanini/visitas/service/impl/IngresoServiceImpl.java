@@ -19,4 +19,9 @@ public class IngresoServiceImpl implements IngresoService {
     public List<Ingreso> obtenerTodosLosUsuarios() {
         return ingresoRepository.findAll();
     }
+
+	@Override
+	public Ingreso getUser(String usuario, String contrasena) {
+		return ingresoRepository.findByUserAndPwd(usuario, contrasena);
+	}
 }
