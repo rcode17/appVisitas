@@ -72,6 +72,9 @@ public class Visita {
     @Column(name = "Observaciones")
     private String observaciones;
     
+    @Column(name = "rol")
+    private String rol;
+    
     @OneToMany(mappedBy = "visita", cascade = CascadeType.ALL, fetch = FetchType.LAZY) 
     @JsonManagedReference
     private List<VisitaServicio> servicios;

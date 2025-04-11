@@ -21,5 +21,6 @@ public class VisitaDTO {
     private Boolean generaOportunidad;
     private Boolean esCliente;
     private String observaciones;
+    private String rol;
     private List<VisitaServicioDTO> servicios;
 }

@@ -60,6 +60,7 @@ public class VisitaServiceImpl implements VisitaService{
         visita.setGeneraOportunidad(visitaDTO.getGeneraOportunidad());
         visita.setEsCliente(visitaDTO.getEsCliente());
         visita.setObservaciones(visitaDTO.getObservaciones());
+        visita.setRol(visitaDTO.getRol());
 
         TipoVisita tipoVisita = tipoVisitaRepository.findById(visitaDTO.getIdTipoVisita())
                 .orElseThrow(() -> new IllegalArgumentException("Tipo de visita no encontrado"));
