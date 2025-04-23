@@ -22,6 +22,8 @@ public class IngresoServiceImpl implements IngresoService {
 
 	@Override
 	public Ingreso getUser(String usuario, String contrasena) {
-		return ingresoRepository.findByUserAndPwd(usuario, contrasena);
+		
+		List<Ingreso> listingreso= ingresoRepository.findByUserAndPwd(usuario, contrasena);
+		return listingreso.get(0);
 	}
 }
