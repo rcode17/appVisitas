@@ -18,7 +18,7 @@ public class RangoVisitaServiceImpl implements RangoVisitaService {
 	@Override
 	public List<RangoVisita> findAllByOrderByNombreAsc() {
 
-		return rangoVisitaRepository.findAllByOrderByNombreAsc();
+		return rangoVisitaRepository.findAllByOrderByIdRangoAsc();
 	}
 
 }

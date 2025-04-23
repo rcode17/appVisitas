@@ -10,5 +10,5 @@ import com.stefanini.visitas.modelo.RangoVisita;
 @Repository
 public interface RangoVisitaRepository extends JpaRepository<RangoVisita, Short> {
 	
-	 List<RangoVisita> findAllByOrderByNombreAsc();
+	 List<RangoVisita> findAllByOrderByIdRangoAsc();
 }
